@@ -14,6 +14,7 @@ var dataRef = firebase.database();
 
 var importData;
 
+    // Parse CSV to JSON
     function handleFileSelect(evt) {
         var file = evt.target.files[0];
         Papa.parse(file, {
@@ -23,6 +24,19 @@ var importData;
             importData = results;
             console.log(importData); // send imported csv console as a json
             dataRef.ref('/Import').set({importData}) // send imported csv to firebase database
+            }
+        })
+    }
+
+    // Un-Parse JSON back to CSV
+    function handleFileDownload(evt) {
+        var downloadData = evt.target.files[0];
+        Papa.unparse(downloadData, {
+            header: true,
+            dynamicTyping: true,
+            complete: function(results) {
+            exportData = results;
+            console.log(exportData); // send imported csv console as a json
             }
         })
     }
