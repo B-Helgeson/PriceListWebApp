@@ -14,26 +14,25 @@ var dataRef = firebase.database();
 
 var importData;
 
-function handleFileSelect(evt) {
-var file = evt.target.files[0];
-Papa.parse(file, {
-    header: true,
-    dynamicTyping: true,
-    complete: function(results) {
-    importData = results;
+    function handleFileSelect(evt) {
+        var file = evt.target.files[0];
+        Papa.parse(file, {
+            header: true,
+            dynamicTyping: true,
+            complete: function(results) {
+            importData = results;
+            console.log(importData); // send imported csv console as a json
+            dataRef.ref('/Import').set({importData}) // send imported csv to firebase database
+            }
+        })
     }
-})
-pushFiletoDB(importData)
-}
-
-function pushFiletoDB(data){
-dataRef.ref("/import").push(importData)
-}
-
 
 $(document).ready(function(){
 
-  $("#csv-file").change(handleFileSelect);
-  // Initialize Firebase Setup
+    $("#csv-file").change(handleFileSelect);
+
+    $("#delete").click(function(){
+        dataRef.ref('/Import').remove();
+    });
 
 });
